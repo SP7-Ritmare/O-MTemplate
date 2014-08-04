@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:InsertResultTemplate service="SOS" version="2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:swes="http://www.opengis.net/swes/2.0"
+    xmlns:sos="http://www.opengis.net/sos/2.0"
+    xmlns:swe="http://www.opengis.net/swe/2.0"
+    xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:om="http://www.opengis.net/om/2.0"
+    xmlns:sams="http://www.opengis.net/samplingSpatial/2.0"
+    xmlns:sf="http://www.opengis.net/sampling/2.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sosInsertResultTemplate.xsd http://www.opengis.net/om/2.0 http://schemas.opengis.net/om/2.0/observation.xsd  http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd">
+    <sos:proposedTemplate>
+        <!-- Before using this example, make sure that all preconditions are fulfilled, 
+			e.g. perform InsertSensor example. -->
+        <sos:ResultTemplate>
+            <swes:identifier>http://sp7.irea.cnr.it/procedure/PuntaSaluteCanalGrande/template/1</swes:identifier>
+            <sos:offering>offering:http://sp7.irea.cnr.it/procedure/PuntaSaluteCanalGrande/observations</sos:offering>
+            <sos:observationTemplate>
+                <om:OM_Observation gml:id="PuntaSaluteCanalGrande">
+                    <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_SWEArrayObservation"/>
+                    <om:phenomenonTime nilReason="template"/>
+                    <om:resultTime nilReason="template"/>
+                    <om:procedure xlink:href="http://sp7.irea.cnr.it/procedure/PuntaSaluteCanalGrande"/>
+                    <om:observedProperty xlink:href="http://sp7.irea.cnr.it/procedure/PuntaSaluteCanalGrande/observedProperty/compound"/>
+                    <om:featureOfInterest>  
+                        <sams:SF_SpatialSamplingFeature gml:id="lagunaVenezia001"> <!-- VERO? -->
+                            <gml:identifier codeSpace="">http://sp7.irea.cnr.it/featureOfInterest/PuntaSaluteCanalGrande</gml:identifier>
+                            <gml:name>Laguna di Venezia - Punta Salute Canal Grande</gml:name>
+                            <sf:type xlink:href="http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint"/>
+                            <sf:sampledFeature xlink:href="http://www.opengis.net/def/nil/OGC/0/unknown"/> <!-- VERO? WFS della Laguna di Venezia -->
+                            <sams:shape>
+                                <gml:Point gml:id="pscn">
+                                    <gml:pos srsName="http://www.opengis.net/def/crs/EPSG/0/4326">45.43095919166667 12.33705171111111</gml:pos>
+                                </gml:Point>
+                            </sams:shape>
+                        </sams:SF_SpatialSamplingFeature>
+                    </om:featureOfInterest>
+                    <om:result/>
+                </om:OM_Observation>
+            </sos:observationTemplate>
+            <sos:resultStructure>
+                <swe:DataRecord>
+                    <swe:field name="phenomenonTime">
+                        <swe:Time definition="http://www.opengis.net/def/property/OGC/0/PhenomenonTime">
+                            <swe:uom xlink:href="http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"/>
+                        </swe:Time>
+                    </swe:field>
+                    <swe:field name="TemperatureOfTheWaterColumn">
+                        <swe:Quantity definition="http://vocab.nerc.ac.uk/collection/P02/current/TEMP/">
+                            <swe:uom code="degC"/>
+                        </swe:Quantity>
+                    </swe:field>
+                    <swe:field name="SeaLevel">
+                        <swe:Quantity definition="http://vocab.nerc.ac.uk/collection/P02/current/ASLV/">
+                            <swe:uom code="m"/>
+                        </swe:Quantity>
+                    </swe:field>
+                </swe:DataRecord>
+            </sos:resultStructure>
+            <sos:resultEncoding>
+                <swe:TextEncoding tokenSeparator="@" blockSeparator="#"/>
+            </sos:resultEncoding>
+        </sos:ResultTemplate>
+    </sos:proposedTemplate>
+</sos:InsertResultTemplate>

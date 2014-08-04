@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:InsertResult service="SOS" version="2.0.0"
+    xmlns:sos="http://www.opengis.net/sos/2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sos.xsd">
+    <sos:template>http://sp7.irea.cnr.it/procedure/PuntaSaluteCanalGrande/template/1</sos:template>
+    <sos:resultValues>2013-12-23T12:00:00@8@0.19#2013-12-23T13:00:00@8.1@0.28</sos:resultValues>
+</sos:InsertResult>

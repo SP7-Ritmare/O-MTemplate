@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:InsertObservation xmlns:sos="http://www.opengis.net/sos/2.0"
+    xmlns:swes="http://www.opengis.net/swes/2.0" xmlns:swe="http://www.opengis.net/swe/2.0"
+    xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:om="http://www.opengis.net/om/2.0"
+    xmlns:sams="http://www.opengis.net/samplingSpatial/2.0"
+    xmlns:sf="http://www.opengis.net/sampling/2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="SOS" version="2.0.0"
+    xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sos.xsd http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd">
+    <!-- optional -->
+    <!--
+    <swes:extension>
+        <swe:Boolean definition="SplitDataArrayIntoObservations">
+            <swe:value>true</swe:value>
+        </swe:Boolean>
+    </swes:extension>
+    -->
+    <!-- multiple offerings are possible -->
+    <sos:offering>offering:http://sp7.irea.cnr.it/procedure/CTD/observations</sos:offering>
+
+    <sos:observation>
+        <!-- OM_Observation o1 -->
+        <om:OM_Observation gml:id="profile01">
+
+            <om:type
+                xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_SWEArrayObservation"/>
+            
+            <!-- 
+                Momento di campionamento o estrazione !!!!!
+                The attribute phenomenonTime shall describes the time that the result applies to the property of the FOI.
+                From: D2.9_O&M_Guidelines_V1.0.pdf 7.2.2.3 Ex 1.
+            -->
+            <om:phenomenonTime>
+                <gml:TimePeriod gml:id="phenomenonTime_profile01">
+                    <gml:beginPosition>2014-06-15T10:00:00+01:00</gml:beginPosition>
+                    <gml:endPosition>2014-06-15T11:00:00+01:00</gml:endPosition>
+                </gml:TimePeriod>
+            </om:phenomenonTime>
+
+            <!--
+                Momento di analisi in laboratorio !!!!!
+                The attribute resultTime describes the time when the result became available, 
+                typically when the procedure associated with the observation was completed. For some 
+                observations this is identical to the phenomenonTime. However, there are important 
+                cases where they differ; an example of this is a specimen analyzed in a laboratory, 
+                where the PhenomenonTime should correspond to the time the specimen was taken, 
+                while the ResultTime is the time when the laboratory analysis was completed.
+                From: D2.9_O&M_Guidelines_V1.0.pdf
+            -->
+            <om:resultTime>
+                <gml:TimeInstant gml:id="resultTime_profile01">
+                    <gml:timePosition>2014-06-17T15:30:00+01:00</gml:timePosition>
+                </gml:TimeInstant>
+            </om:resultTime>
+
+            <om:procedure xlink:href="http://sp7.irea.cnr.it/procedure/CTD"/>
+
+            <om:observedProperty xlink:href="http://sp7.irea.cnr.it/procedure/CTD/observedProperty/compound"/>
+
+            <!-- 
+                featureOfInterest: domain of the observation
+                samplingFeature: is an intermediate feature involved in an observation which allows an estimate of a 
+                    property value for the ultimate feature of interest to be made. In the case of a spatial sampling
+                    feature, which is derived from the SF_SamplingFeature, the SpatialSamplingFeature is a point, line,
+                    surface or volume which may be co-located with the ultimate FOI. e.g. a point in a river. The result 
+                    values will vary across the SpatialSamplingFeature
+                sampledFeature: is the feature the SamplingFeature was sampled from, providing the ultimate context for 
+                    the observation. An example of sampledFeature would be the river segment a specimen was taken from
+            -->
+            <om:featureOfInterest>
+                <sams:SF_SpatialSamplingFeature gml:id="ctd01">
+                    <!--<gml:identifier codeSpace="">http://sp7.irea.cnr.it/featureOfInterest/PuntaSaluteCanalGrande</gml:identifier>-->
+                    <gml:name>CTD in Adriatic Sea</gml:name>
+                    <!--
+                        <gml:description>Lake Alserio core collected by ISE CNR with 2 different purposes: pigments and geochemical parameters</gml:description>
+                    -->
+                    <gml:boundedBy>
+                        <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4979">
+                            <!-- 2D CRS -->
+                            <gml:lowerCorner>45.786388 9.216668 252.0</gml:lowerCorner>
+                            <gml:upperCorner>45.786390 9.216666 251.35</gml:upperCorner>
+                        </gml:Envelope>
+                    </gml:boundedBy>
+                    <sf:type
+                        xlink:href="http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingCurve"/>
+                    <!-- WFS -->
+                    <sf:sampledFeature
+                        xlink:href="http://geoserver.ise.cnr.it/ise_env/ows?service=WFS&#38;version=1.0.0&#38;request=GetFeature&#38;typeName=ise_env:Alserio_lake"
+                        xlink:title="Lake Alserio"/>
+                    <sams:shape>
+                        <gml:LineString gml:id="shape_CTD01"
+                            srsName="http://www.opengis.net/def/crs/EPSG/0/4979">
+                            <!-- 3D CRS -->
+                            <!-- la profondità dell'inizio della corota è:
+                                (livello del lago - profondità lago nel punto di prelievo della carota)
+                                es. se oggi la superficie del lago ha quota 295 m slm e la profondità al 
+                                      fondo è di 35 m la line string lungo la carota avrà posizione 
+                                      iniziale con z uguale a 260 m slm
+                                    se domani la superficie del lago ha quota 280 m slm e la profondità al 
+                                      fondo sarà di 20 m ma la line string lungo la carota avrà posizione
+                                      iniziale sempre con z uguale a 260 m slm
+                            -->
+                            <gml:pos>45.786389 9.216667 252.0</gml:pos>
+                            <!-- ... -->
+                            <gml:pos>45.786389 9.216667 251.35</gml:pos>
+                        </gml:LineString>
+                    </sams:shape>
+                </sams:SF_SpatialSamplingFeature>
+            </om:featureOfInterest>
+            
+            <om:result>
+                <!-- 
+                    In O&M esistono classi di specializzazione per le osservazioni, OM_SWEArrayObservation permette di specificare all'interno di om:result
+                    3 tipi di strutture dato definiti in swe common: swe:DataArray, swe:Matrix e swe:DataStream. swe:DataArray ha il campo swe:elementCount
+                    obbligatorio, quindi si prevede per questa struttura un numero specificato di osservazioni; swe:Matrix è un caso speciale di DataArray
+                    e prevede 2 attributi referenceFrame (di fatto un EPSG) e localFrame (convenzione locale) per esprimere le componenti del vettore in un frame
+                    definito; infine swe:DataStream simile a swe:DataArray dove swe:elementCount non obbligatorio flusso di dati che non può finire (es. 
+                    real time sensor data), rispetto a swe:DataArray non può essere contenuto dentro altri aggregati ma può solo essere radice di rappresentazione
+                    di un insieme di osservazioni.
+                    Nel caso della Carota si consiglia l'uso di swe:DataArray!
+                -->
+                <swe:DataArray>
+                    <swe:elementCount>
+                        <swe:Count>
+                            <swe:value>14</swe:value>
+                        </swe:Count>
+                    </swe:elementCount>
+                    
+                    <swe:elementType name="defs">
+                        <swe:DataRecord>
+                            
+                            <swe:field name="sliceEnds">
+                                <swe:Vector referenceFrame="#shape_CTD01">
+                                    <swe:coordinate name="depthTop">
+                                        <swe:Quantity>
+                                            <swe:uom code="cm"/>
+                                        </swe:Quantity>
+                                    </swe:coordinate>
+                                    <swe:coordinate name="depthBottom">
+                                        <swe:Quantity>
+                                            <swe:uom code="cm"/>
+                                        </swe:Quantity>
+                                    </swe:coordinate>
+                                </swe:Vector>
+                            </swe:field>
+                            <swe:field name="phenomenonTime">
+                                <swe:Time definition="http://www.opengis.net/def/property/OGC/0/PhenomenonTime">
+                                    <swe:uom xlink:href="http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"/>
+                                </swe:Time>
+                            </swe:field>
+                            <swe:field name="DisolvedOxygen">
+                                <swe:Quantity definition="http://vocab.nerc.ac.uk/collection/P02/current/DOXY/"> <!-- uri of biomass in the thesaurus -->
+                                    <swe:uom code="mg/l"/>
+                                </swe:Quantity>
+                            </swe:field>
+                            <swe:field name="TemperatureOfTheWaterColumn">
+                                <swe:Quantity definition="http://vocab.nerc.ac.uk/collection/P02/current/TEMP/"> <!-- uri of density in the thesaurus -->
+                                    <swe:uom code="degC"/>
+                                </swe:Quantity>
+                            </swe:field>
+                            <swe:field name="WCond">
+                                <swe:Quantity definition="http://vocab.nerc.ac.uk/collection/P02/current/CNDC/"> <!-- uri of density in the thesaurus -->
+                                    <swe:uom xlink:href="http://vocab.nerc.ac.uk/collection/P06/current/UECA/"
+                                        code="S/m"/>
+                                </swe:Quantity>
+                            </swe:field>
+                            
+                        </swe:DataRecord>
+                    </swe:elementType>
+                    
+                    <swe:encoding>
+                        <swe:TextEncoding tokenSeparator="@" blockSeparator="\n" collapseWhiteSpaces="false" decimalSeparator="."/>
+                    </swe:encoding>
+                    
+                    <swe:values>                        
+                        2014-06-27T12:21:25.000Z@0@5@21.5@11.163@100
+                        2014-06-27T12:21:45.000Z@5@10@21.5@11.163@103
+                        2014-06-27T12:22:05.000Z@10@15@21.5@11.204@103
+                        2014-06-27T12:22:27.000Z@15@20@21.5@11.199@103
+                        2014-06-27T12:22:45.000Z@20@25@21.5@11.226@103
+                        2014-06-27T12:23:05.000Z@25@30@21.5@11.22@103
+                        2014-06-27T12:23:25.000Z@30@35@21.562@11.24@103
+                        2014-06-27T12:24:41.000Z@35@40@21.437@11.097@105
+                        2014-06-27T12:24:59.000Z@40@45@21.437@11.09@105
+                        2014-06-27T12:25:19.000Z@45@50@21.437@11.081@105
+                        2014-06-27T12:25:39.000Z@50@55@21.437@11.065@107
+                        2014-06-27T12:26:01.000Z@55@60@21.437@11.072@107
+                        2014-06-27T12:26:05.000Z@60@65@21.437@10.628@107
+                        2014-06-27T12:26:23.000Z@65@70@21.5@10.65@107
+                    </swe:values>                
+                </swe:DataArray>
+            </om:result>
+
+        </om:OM_Observation>
+        <!-- End of OM_Observation o1 -->
+    </sos:observation>
+
+</sos:InsertObservation>
